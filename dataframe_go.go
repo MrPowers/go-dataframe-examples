@@ -1,14 +1,12 @@
 package main
 
 import (
-	//"encoding/csv"
 	"context"
 	"fmt"
-	//"github.com/rocketlaunchr/dataframe-go/dataframe"
+	dataframe "github.com/rocketlaunchr/dataframe-go"
 	"github.com/rocketlaunchr/dataframe-go/imports"
 	"log"
 	"os"
-	//"strings"
 )
 
 func main() {
@@ -20,11 +18,11 @@ func main() {
 		log.Fatal(err)
 	}
 
-	dataframe, err := imports.LoadFromCSV(ctx, csvfile)
+	df, err := imports.LoadFromCSV(ctx, csvfile)
 
-	fmt.Print(dataframe.Table())
+	fmt.Print(df.Table())
 
-	s := dataframe.Series[2]
+	s := df.Series[1]
 
 	applyFn := dataframe.ApplySeriesFn(func(val interface{}, row, nRows int) interface{} {
 		return 2 * val.(int64)
@@ -32,10 +30,5 @@ func main() {
 
 	dataframe.Apply(ctx, s, applyFn, dataframe.FilterOptions{InPlace: true})
 
-	fmt.Print(dataframe.Table())
-
-	// looks like this file has relevant stuff: https://github.com/rocketlaunchr/dataframe-go/blob/0ec0a97d0f0d052e95557fee2aba1f3ce5bf94b1/apply.go
-
-	// can't figure it out
-
+	fmt.Print(df.Table())
 }
