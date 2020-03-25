@@ -12,7 +12,7 @@ import (
 
 func main() {
 	// step 1: open the csv
-	csvfile, err := os.Open("example.csv")
+	csvfile, err := os.Open("data/example.csv")
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -45,7 +45,7 @@ func main() {
 	fmt.Println("df filtered: ", df)
 
 	// step 6: write csv
-	f, err := os.Create("example_edited.csv")
+	f, err := os.Create("tmp/example_edited.csv")
 	if err != nil {
 		log.Fatal(err)
 	}
