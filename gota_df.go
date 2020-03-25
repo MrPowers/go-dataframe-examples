@@ -50,5 +50,5 @@ func main() {
 		log.Fatal(err)
 	}
 
-	//df.WriteCSV(f)
+	df.WriteCSV(f)
 }
