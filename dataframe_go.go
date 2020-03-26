@@ -34,4 +34,15 @@ func main() {
 	dataframe.Apply(ctx, s, applyFn, dataframe.FilterOptions{InPlace: true})
 
 	fmt.Print(df.Table())
+
+	filterFn := dataframe.FilterDataFrameFn(func(vals map[interface{}]interface{}, row, nRows int) (dataframe.FilterAction, error) {
+		if vals["favorite_number"] < 20 {
+			return dataframe.DROP, nil
+		}
+		return dataframe.KEEP, nil
+	})
+
+	df2, _ := dataframe.Filter(ctx, df, filterFn)
+
+	fmt.Print(df2.Table())
 }
