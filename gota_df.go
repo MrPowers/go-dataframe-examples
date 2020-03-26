@@ -1,7 +1,7 @@
 package main
 
 import (
-	"encoding/csv"
+	//"encoding/csv"
 	"fmt"
 	"log"
 	"os"
@@ -11,25 +11,17 @@ import (
 )
 
 func main() {
-	// step 1: open the csv
+	// load csv
 	csvfile, err := os.Open("data/example.csv")
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	// step 2: read the csv into memory.
-	reader := csv.NewReader(csvfile)
-	// note: you can also iterate through csv records with `.Read()` to handle row-level errors / manipulate data
-	records, err := reader.ReadAll()
-	if err != nil {
-		log.Fatal(err)
-	}
+	df := dataframe.ReadCSV(csvfile)
 
-	// step 3: load the csv into a dataframe
-	df := dataframe.LoadRecords(records)
 	fmt.Println("df: ", df)
 
-	// step 4: add column is_even to the dataframe
+	// add is_even column
 	isEven := func(s series.Series) series.Series {
 		num, _ := s.Int()
 		isFavoriteNumberEven := num[0]%2 == 0
@@ -40,12 +32,12 @@ func main() {
 	df = df.CBind(isEvenSeries)
 	fmt.Println("df with is even: ", df)
 
-	// step 5: filter the dataframe
+	// filter the dataframe
 	df = df.Filter(dataframe.F{"is_even", "==", true})
 	fmt.Println("df filtered: ", df)
 
-	// step 6: write csv
-	f, err := os.Create("tmp/example_edited.csv")
+	// write csv
+	f, err := os.Create("tmp/gota_example_output.csv")
 	if err != nil {
 		log.Fatal(err)
 	}
