@@ -42,26 +42,33 @@ func isEven(x int) bool {
 }
 
 func mainExample() {
-	// open a CSV file
 	csvfile, err := os.Open("data/example.csv")
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	// view the DataFrame
 	f := qframe.ReadCSV(csvfile)
 	fmt.Println(f)
 
 	f = f.Apply(
-		qframe.Instruction{Fn: isEven, DstCol: "is_even", SrcCol1: "favorite_number"})
+		qframe.Instruction{
+			Fn:      isEven,
+			DstCol:  "is_even",
+			SrcCol1: "favorite_number"})
 
 	fmt.Println(f)
 
 	newF := f.Filter(qframe.Filter{Column: "is_even", Comparator: "=", Arg: true})
 	fmt.Println(newF)
+
+	file, err := os.Create("tmp/qframe_main_ouput.csv")
+	if err != nil {
+		log.Fatal(err)
+	}
+	newF.ToCSV(file)
 }
 
 func main() {
-	concatExample()
+	//concatExample()
 	mainExample()
 }
