@@ -12,13 +12,16 @@ import (
 func main() {
 	ctx := context.TODO()
 
-	// step 1: open the csv
 	csvfile, err := os.Open("data/example.csv")
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	df, err := imports.LoadFromCSV(ctx, csvfile)
+	df, err := imports.LoadFromCSV(ctx, csvfile, imports.CSVLoadOptions{
+		DictateDataType: map[string]interface{}{
+			"first_name":      "",       // specify this column as string
+			"favorite_number": int64(0), // specify this column as int64
+		}})
 
 	fmt.Print(df.Table())
 
