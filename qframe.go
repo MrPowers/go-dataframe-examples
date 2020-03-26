@@ -8,7 +8,7 @@ import (
 	"os"
 )
 
-func main() {
+func concatExample() {
 	// open a CSV file
 	csvfile, err := os.Open("data/basic.csv")
 	if err != nil {
@@ -35,5 +35,33 @@ func main() {
 		log.Fatal(err)
 	}
 	f.ToCSV(file)
+}
 
+func isEven(x int) bool {
+	return x%2 == 0
+}
+
+func mainExample() {
+	// open a CSV file
+	csvfile, err := os.Open("data/example.csv")
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	// view the DataFrame
+	f := qframe.ReadCSV(csvfile)
+	fmt.Println(f)
+
+	f = f.Apply(
+		qframe.Instruction{Fn: isEven, DstCol: "is_even", SrcCol1: "favorite_number"})
+
+	fmt.Println(f)
+
+	newF := f.Filter(qframe.Filter{Column: "is_even", Comparator: "=", Arg: true})
+	fmt.Println(newF)
+}
+
+func main() {
+	concatExample()
+	mainExample()
 }
